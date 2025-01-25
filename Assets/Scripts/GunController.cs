@@ -9,7 +9,7 @@ public class GunController : MonoBehaviour
     public GameObject player;
     public GameObject bulletPrefab;
     public GameObject bulletSpawnPoint;
-    public float damage;
+    public int damage;
     void Start() {
         _playerControls = new PlayerControls();
     }

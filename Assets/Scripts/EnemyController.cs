@@ -1,12 +1,12 @@
 using System.Collections;
 using UnityEngine;
 
-public class EnemyController : MonoBehaviour
+public class EnemyController : MonoBehaviour, IHealth
 {
     private GameObject _player;
    [SerializeField] private float health;
    [SerializeField] private float rotationSpeed;
-   [SerializeField] private float damage;
+   [SerializeField] private int Shootingdamage;
    [SerializeField] private GameObject bulletPrefab;
    [SerializeField] private GameObject bulletSpawnPoint;
    [SerializeField] private EnemyType type;
@@ -53,26 +53,25 @@ public class EnemyController : MonoBehaviour
         while (_inRange){
             Quaternion spawnRotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
             GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.transform.position, spawnRotation);
-            bullet.GetComponent<Bullet>().damage = damage;
-            Debug.Log("shooting in cora");
+            bullet.GetComponent<Bullet>().damage = Shootingdamage;
             yield return new WaitForSeconds(attackRate);
         }
     }
 
     IEnumerator SwingMelee() {
         while (_inRange) {
-            _player.GetComponent<PlayerController>().TakeDamage(damage);
-            Debug.Log("meele in cora");
+            _player.GetComponent<IHealth>().TakeDamage(Shootingdamage);
             yield return new WaitForSeconds(attackRate);
         }
     }
     
 
-    public void TakeDamage(float damageTaken) {
+    public void TakeDamage(int damage) {
         Debug.Log("Taking damage");
-        health -= damageTaken;
+        health -= damage;
         if (health <= 0) {
             Destroy(gameObject);
         }
     }
+    
 }
