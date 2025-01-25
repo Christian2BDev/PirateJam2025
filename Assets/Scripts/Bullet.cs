@@ -18,9 +18,15 @@ public class Bullet : MonoBehaviour
 
     private void OnCollisionEnter(Collision other) {
         Destroy(gameObject);
-        if (other.gameObject.TryGetComponent<IHealth>(out var health) || (other.transform.parent.gameObject !=null && other.transform.parent.gameObject.TryGetComponent<IHealth>(out health)) )
+        if ( other.gameObject.TryGetComponent<IHealth>(out var health))
         {
             health.TakeDamage(damage);
+            
+        }else if (other.gameObject.transform.parent != null && other.gameObject.transform.parent.TryGetComponent<IHealth>(out var healthParent))
+        {
+            healthParent.TakeDamage(damage);
         }
+
+        
     }
 }
