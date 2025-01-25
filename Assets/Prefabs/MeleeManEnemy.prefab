@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 5499836452518755708}
   - component: {fileID: 2991810381364606972}
   - component: {fileID: 2185667777088845800}
+  - component: {fileID: 7671752447984409311}
+  - component: {fileID: 7761011453287202733}
   m_Layer: 0
   m_Name: MeleeManEnemy
   m_TagString: Enemy
@@ -130,8 +132,49 @@ MonoBehaviour:
   bulletPrefab: {fileID: 4418777772250967488, guid: 9ff4462abc9d2417a9664df2de2b7b61, type: 3}
   bulletSpawnPoint: {fileID: 0}
   type: 1
-  aggroRange: 2
-  attackRate: 0.5
+  aggroRange: 12
+  attackRange: 2
+  attackCooldown: 1
+--- !u!114 &7671752447984409311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5442431566071701607}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e492c59a2d8b40ab8149398e6c944e4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 3
+--- !u!54 &7761011453287202733
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5442431566071701607}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 0
 --- !u!1 &6346557484414641624
 GameObject:
   m_ObjectHideFlags: 0
