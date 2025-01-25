@@ -4,7 +4,7 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     
-    public float damage;
+    public int damage;
     [SerializeField] float speed;
     
     private Rigidbody rb;
@@ -18,13 +18,9 @@ public class Bullet : MonoBehaviour
 
     private void OnCollisionEnter(Collision other) {
         Destroy(gameObject);
-        if (other.gameObject.tag.Equals("Player")) {
-            other.gameObject.GetComponent<PlayerController>().TakeDamage(damage);
-        }else if (other.gameObject.tag.Equals("Enemy")) {
-            other.gameObject.GetComponent<EnemyController>().TakeDamage(damage);
-        }else if (other.gameObject.tag.Equals("Gun")) {
-            other.transform.parent.gameObject.GetComponent<EnemyController>().TakeDamage(damage);
+        if (other.gameObject.TryGetComponent<IHealth>(out var health) || (other.transform.parent.gameObject !=null && other.transform.parent.gameObject.TryGetComponent<IHealth>(out health)) )
+        {
+            health.TakeDamage(damage);
         }
-        
     }
 }

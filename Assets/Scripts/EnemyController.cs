@@ -1,15 +1,17 @@
 using Enemy;
 using UnityEngine;
 
+
 public enum EnemyType {
     GunMan, MeleeMan
 }
-public class EnemyController : MonoBehaviour, IEnemyController
+public class EnemyController : MonoBehaviour, IEnemyController, IHealth
+
 {
     private GameObject _player;
    [SerializeField] private float health;
    [SerializeField] private float rotationSpeed;
-   [SerializeField] private float damage;
+   [SerializeField] private int Shootingdamage;
    [SerializeField] private GameObject bulletPrefab;
    [SerializeField] private GameObject bulletSpawnPoint;
    [SerializeField] private EnemyType type;
@@ -50,24 +52,27 @@ public class EnemyController : MonoBehaviour, IEnemyController
         }
     }
     
+
     private void ShootBullet() {
         Quaternion spawnRotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
         GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.transform.position, spawnRotation);
-        bullet.GetComponent<Bullet>().damage = damage;
+        bullet.GetComponent<Bullet>().damage = Shootingdamage;
     }
 
     private void SwingMelee() {
-        _player.GetComponent<PlayerController>().TakeDamage(damage);
+        _player.GetComponent<IHealth>().TakeDamage(Shootingdamage);
+
     }
     
 
-    public void TakeDamage(float damageTaken) {
+    public void TakeDamage(int damage) {
         Debug.Log("Taking damage");
-        health -= damageTaken;
+        health -= damage;
         if (health <= 0) {
             Destroy(gameObject);
         }
     }
+
 
     #region IEnemyContoller interface
 
@@ -76,4 +81,6 @@ public class EnemyController : MonoBehaviour, IEnemyController
     public EnemyType EnemyType => type;
 
     #endregion
+
+
 }

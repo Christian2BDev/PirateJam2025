@@ -6,10 +6,12 @@ public class GunController : MonoBehaviour
     public GameObject player;
     public GameObject bulletPrefab;
     public GameObject bulletSpawnPoint;
-    public float damage;
+
+    public int damage;
     void Start()
     {
         UserInput.Main.OnPlayerFire += OnFire;
+
     }
 
     private void OnFire() { 

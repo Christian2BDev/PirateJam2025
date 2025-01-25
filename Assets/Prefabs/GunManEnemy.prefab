@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 8397203885753795937}
   m_Layer: 0
   m_Name: GunManEnemy
-  m_TagString: Enemy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -128,7 +128,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 100
   rotationSpeed: 10
-  damage: 10
+  Shootingdamage: 0
   bulletPrefab: {fileID: 4418777772250967488, guid: 9ff4462abc9d2417a9664df2de2b7b61, type: 3}
   bulletSpawnPoint: {fileID: 6188308853069144964}
   type: 0
