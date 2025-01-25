@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 7709989325026280757}
   - component: {fileID: 5641442245944052935}
   - component: {fileID: 5989086085674754603}
+  - component: {fileID: 7218790310008959209}
+  - component: {fileID: 8397203885753795937}
   m_Layer: 0
   m_Name: GunManEnemy
   m_TagString: Enemy
@@ -130,8 +132,49 @@ MonoBehaviour:
   bulletPrefab: {fileID: 4418777772250967488, guid: 9ff4462abc9d2417a9664df2de2b7b61, type: 3}
   bulletSpawnPoint: {fileID: 6188308853069144964}
   type: 0
-  aggroRange: 5
-  attackRate: 1
+  aggroRange: 12
+  attackRange: 10
+  attackCooldown: 1
+--- !u!114 &7218790310008959209
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 956834959159055394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e492c59a2d8b40ab8149398e6c944e4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 3
+--- !u!54 &8397203885753795937
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 956834959159055394}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 0
 --- !u!1 &2619129090197267199
 GameObject:
   m_ObjectHideFlags: 0
