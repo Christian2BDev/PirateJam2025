@@ -11,7 +11,7 @@ public class EnemyController : MonoBehaviour, IEnemyController, IHealth
     private GameObject _player;
    [SerializeField] private float health;
    [SerializeField] private float rotationSpeed;
-   [SerializeField] private int Shootingdamage;
+   [SerializeField] private int shootDamage;
    [SerializeField] private GameObject bulletPrefab;
    [SerializeField] private GameObject bulletSpawnPoint;
    [SerializeField] private EnemyType type;
@@ -20,13 +20,20 @@ public class EnemyController : MonoBehaviour, IEnemyController, IHealth
    [SerializeField] private float attackCooldown;
 
    private float _attackCurrentCooldown;
+   
+   ObjectPooler _objectPooler;
     void Start() {
         _player = GameObject.FindGameObjectWithTag("Player");
+        _objectPooler = ObjectPooler.Instance;
     }
 
     private void Update() {
         _attackCurrentCooldown -= Time.deltaTime;
-        LookAndShoot();
+        if (_player != null)
+        {
+            LookAndShoot();
+        }
+        
     }
 
     void LookAndShoot()
@@ -55,18 +62,18 @@ public class EnemyController : MonoBehaviour, IEnemyController, IHealth
 
     private void ShootBullet() {
         Quaternion spawnRotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
-        GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.transform.position, spawnRotation);
-        bullet.GetComponent<Bullet>().damage = Shootingdamage;
+        //GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.transform.position, spawnRotation);
+        GameObject bullet = _objectPooler.SpawnFromPool("Bullet", bulletSpawnPoint.transform.position, spawnRotation);
+        bullet.GetComponent<Bullet>().damage = shootDamage;
     }
 
     private void SwingMelee() {
-        _player.GetComponent<IHealth>().TakeDamage(Shootingdamage);
+        _player.GetComponent<IHealth>().TakeDamage(shootDamage);
 
     }
     
 
     public void TakeDamage(int damage) {
-        Debug.Log("Taking damage");
         health -= damage;
         if (health <= 0) {
             Destroy(gameObject);
