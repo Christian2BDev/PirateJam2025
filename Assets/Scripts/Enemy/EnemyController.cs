@@ -1,4 +1,5 @@
 using Enemy;
+using Shared;
 using UnityEngine;
 
 
@@ -25,6 +26,7 @@ public class EnemyController : MonoBehaviour, IEnemyController, IHealth
     void Start() {
         _player = GameObject.FindGameObjectWithTag("Player");
         _objectPooler = ObjectPooler.Instance;
+        _objectPooler.RegisterPool<Bullet>(bulletPrefab);
     }
 
     private void Update() {
@@ -62,9 +64,8 @@ public class EnemyController : MonoBehaviour, IEnemyController, IHealth
 
     private void ShootBullet() {
         Quaternion spawnRotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
-        //GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.transform.position, spawnRotation);
-        GameObject bullet = _objectPooler.SpawnFromPool("Bullet", bulletSpawnPoint.transform.position, spawnRotation);
-        bullet.GetComponent<Bullet>().damage = shootDamage;
+        var bullet = _objectPooler.SpawnFromPool<Bullet>(bulletSpawnPoint.transform.position, spawnRotation);
+        bullet.damage = shootDamage;
     }
 
     private void SwingMelee() {

@@ -2,62 +2,62 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectPooler : MonoBehaviour
+namespace Shared
 {
-    
-
-    [Serializable]
-    public class Pool
+    public class ObjectPooler : MonoBehaviour
     {
-        public string tag;
-        public GameObject prefab;
-        public int size;
-    }
-
-    public List<Pool> pools;
-    private Dictionary<string, Queue<GameObject>> _poolDictionary;
-    
-    public static ObjectPooler Instance;
-    private void Awake()
-    {
-        Instance = this;
-    }
-    
-    void Start()
-    {
-        _poolDictionary = new Dictionary<string, Queue<GameObject>>();
-
-        foreach (Pool pool in pools)
+        [Serializable]
+        public class Pool
         {
-            Queue<GameObject> objectPool = new Queue<GameObject>();
-
-            for (int i = 0; i < pool.size; i++)
+            public GameObject prefab;
+            private List<GameObject> _pool = new List<GameObject>();
+            public GameObject GetPooledObject(Transform parent)
             {
-                GameObject obj = Instantiate(pool.prefab);
-                obj.SetActive(false);
-                objectPool.Enqueue(obj);
+                foreach (var obj in _pool)
+                {
+                    if (!obj.activeSelf)
+                    {
+                        obj.SetActive(true);
+                        return obj;
+                    }
+                }
+            
+                var newObject = Instantiate(prefab, parent);
+                _pool.Add(newObject);
+                return newObject;
             }
-
-            _poolDictionary.Add(pool.tag, objectPool);
         }
-    }
-
-    public GameObject SpawnFromPool(string pooltag, Vector3 position, Quaternion rotation)
-    {
-        if (!_poolDictionary.ContainsKey(pooltag))
+    
+        private readonly Dictionary<Type, Pool> _poolDictionary = new Dictionary<Type, Pool>();
+        public static ObjectPooler Instance;
+        private void Awake()
         {
-            Debug.LogWarning($"Pool with tag {pooltag} doesn't exist.");
-            return null;
+            Instance = this;
         }
 
-        GameObject objectToSpawn = _poolDictionary[pooltag].Dequeue();
+        public void RegisterPool<T>(GameObject prefab)
+        {
+            _poolDictionary[typeof(T)] = new Pool()
+            {
+                prefab = prefab,
+            };
+        }
 
-        objectToSpawn.SetActive(true);
-        objectToSpawn.transform.position = position;
-        objectToSpawn.transform.rotation = rotation;
+        public T SpawnFromPool<T>(Vector3 position, Quaternion rotation)
+        {
+            if (!_poolDictionary.TryGetValue(typeof(T), out var pool))
+            {
+                Debug.LogError("No pool registered for type: " + typeof(T));
+                return default;
+            }
+        
+            GameObject objectToSpawn = pool.GetPooledObject(transform);
 
-        _poolDictionary[pooltag].Enqueue(objectToSpawn);
+            objectToSpawn.SetActive(true);
+            objectToSpawn.transform.position = position;
+            objectToSpawn.transform.rotation = rotation;
 
-        return objectToSpawn;
+            return objectToSpawn.GetComponent<T>();
+        }
     }
 }
