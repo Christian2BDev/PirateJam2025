@@ -1,5 +1,6 @@
 using UnityEngine;
 using Player;
+using Shared;
 
 public class GunController : MonoBehaviour
 {
@@ -14,12 +15,12 @@ public class GunController : MonoBehaviour
     {
         UserInput.Main.OnPlayerFire += OnFire;
         _objectPooler = ObjectPooler.Instance;
+        _objectPooler.RegisterPool<Bullet>(bulletPrefab);
     }
 
     private void OnFire() { 
         Quaternion spawnRotation = Quaternion.Euler(0, player.transform.rotation.eulerAngles.y, 0);
-        //GameObject bullet =  Instantiate(bulletPrefab, bulletSpawnPoint.transform.position, spawnRotation);
-        GameObject bullet = _objectPooler.SpawnFromPool("Bullet",bulletSpawnPoint.transform.position , spawnRotation);
+        var bullet = _objectPooler.SpawnFromPool<Bullet>(bulletSpawnPoint.transform.position , spawnRotation);
         bullet.GetComponent<Bullet>().damage = damage;
     }
 }
