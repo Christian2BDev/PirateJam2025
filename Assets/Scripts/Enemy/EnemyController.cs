@@ -67,6 +67,7 @@ public class EnemyController : MonoBehaviour, IEnemyController, IHealth
         Quaternion spawnRotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
         var bullet = _objectPooler.SpawnFromPool<Bullet>(bulletSpawnPoint.transform.position, spawnRotation);
         bullet.damage = shootDamage;
+        bullet._canHit = CanHit.Player;
     }
 
     private void SwingMelee() {

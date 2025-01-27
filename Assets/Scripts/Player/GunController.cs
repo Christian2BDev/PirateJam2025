@@ -21,6 +21,8 @@ public class GunController : MonoBehaviour
     private void OnFire() { 
         Quaternion spawnRotation = Quaternion.Euler(0, player.transform.rotation.eulerAngles.y, 0);
         var bullet = _objectPooler.SpawnFromPool<Bullet>(bulletSpawnPoint.transform.position , spawnRotation);
-        bullet.GetComponent<Bullet>().damage = damage;
+        bullet.damage = damage;
+        bullet._canHit = CanHit.Enemys;
+        
     }
 }
