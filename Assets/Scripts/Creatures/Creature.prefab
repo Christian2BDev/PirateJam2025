@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 614237677367639199}
   - component: {fileID: 4455639001486797349}
   - component: {fileID: 2553380385415356760}
-  - component: {fileID: 3496443060714763847}
   m_Layer: 0
   m_Name: Capsule
   m_TagString: Untagged
@@ -87,29 +86,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &3496443060714763847
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1638632234563445939}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1900609622648834053
 GameObject:
   m_ObjectHideFlags: 0
@@ -121,7 +97,6 @@ GameObject:
   - component: {fileID: 9048009818918226743}
   - component: {fileID: 8373809738776653172}
   - component: {fileID: 3094048340919936328}
-  - component: {fileID: 8069251056704699155}
   m_Layer: 0
   m_Name: Gun (1)
   m_TagString: Gun
@@ -197,29 +172,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &8069251056704699155
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1900609622648834053}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!1 &2650363566018908142
 GameObject:
   m_ObjectHideFlags: 0
@@ -382,6 +334,7 @@ MonoBehaviour:
   spawnPoint: {fileID: 5137230965142273452}
   mainGun: {fileID: 3305345480444471466}
   cursedGun: {fileID: 7072434355646960754}
+  gunThrowPrefab: {fileID: 5573555486864369525, guid: b375ccf2889802e4a819c17ba29400e6, type: 3}
 --- !u!114 &4992633701230116014
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -420,7 +373,6 @@ GameObject:
   - component: {fileID: 6728183613207296241}
   - component: {fileID: 1316762698084265704}
   - component: {fileID: 3408834797425605767}
-  - component: {fileID: 6686231778939148927}
   m_Layer: 0
   m_Name: Gun
   m_TagString: Gun
@@ -497,29 +449,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &6686231778939148927
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3305345480444471466}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!1 &3719379050436363868
 GameObject:
   m_ObjectHideFlags: 0
@@ -531,7 +460,6 @@ GameObject:
   - component: {fileID: 9153510950813695818}
   - component: {fileID: 196125041344006210}
   - component: {fileID: 6734372458735597401}
-  - component: {fileID: 7553312602779027659}
   m_Layer: 0
   m_Name: Capsule (1)
   m_TagString: Untagged
@@ -607,29 +535,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &7553312602779027659
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3719379050436363868}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5342151896783694862
 GameObject:
   m_ObjectHideFlags: 0
@@ -641,7 +546,6 @@ GameObject:
   - component: {fileID: 1111417349094899599}
   - component: {fileID: 1290053648350803483}
   - component: {fileID: 2324840662864953411}
-  - component: {fileID: 4988833352943322770}
   m_Layer: 0
   m_Name: Gun (1)
   m_TagString: Gun
@@ -717,29 +621,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &4988833352943322770
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5342151896783694862}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!1 &7072434355646960754
 GameObject:
   m_ObjectHideFlags: 0
@@ -751,7 +632,6 @@ GameObject:
   - component: {fileID: 2018453849463827766}
   - component: {fileID: 2600253676971646085}
   - component: {fileID: 5669437598779720075}
-  - component: {fileID: 5493133662938780288}
   m_Layer: 0
   m_Name: CursedGun
   m_TagString: Gun
@@ -830,29 +710,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &5493133662938780288
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7072434355646960754}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!1 &7954709368244320329
 GameObject:
   m_ObjectHideFlags: 0
@@ -865,7 +722,7 @@ GameObject:
   m_Layer: 0
   m_Name: SpawnPointBullet
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -878,7 +735,7 @@ Transform:
   m_GameObject: {fileID: 7954709368244320329}
   serializedVersion: 2
   m_LocalRotation: {x: 1, y: -0, z: -0, w: 0}
-  m_LocalPosition: {x: 0.47800016, y: -0, z: 2.0247202}
+  m_LocalPosition: {x: 0.47800016, y: -0, z: 2.946}
   m_LocalScale: {x: 0.64, y: 0.64000016, z: 1.1200002}
   m_ConstrainProportionsScale: 0
   m_Children: []

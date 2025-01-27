@@ -1,5 +1,7 @@
 using System;
 using Player;
+using Shared;
+using Sound;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -17,6 +19,7 @@ namespace Creatures
         
         [SerializeField] private GameObject mainGun;
         [SerializeField] private GameObject cursedGun;
+        [SerializeField] private GameObject gunThrowPrefab;
         
         private Vector2 _currentMoveInput = Vector2.zero;
         
@@ -37,6 +40,7 @@ namespace Creatures
         {
             UserInput.Main.OnPlayerInputMove += OnPlayerInputMove;
             AllegianceManager.RegisterCreature(_allegianceController);
+            ObjectPooler.Instance.RegisterPool<WeaponThrow>(gunThrowPrefab);
         }
 
         private void FixedUpdate()
@@ -51,6 +55,14 @@ namespace Creatures
             else
             {
                 UpdatePlayerMove();
+            }
+        }
+
+        private void Update()
+        {
+            if (_allegianceController.allegiance == AllegianceType.Player && Input.GetKeyDown(KeyCode.E))
+            {
+                ThrowWeapon();
             }
         }
 
@@ -96,6 +108,26 @@ namespace Creatures
             _rigidbody.linearVelocity = velocity;
         }
 
+        private void ThrowWeapon()
+        {
+            Vector3 mousePosition = Input.mousePosition;
+            mousePosition.z = 2;
+            if (Camera.main is { } mainCamera &&
+                Physics.Raycast(mainCamera.ScreenPointToRay(mousePosition), out var hit))
+            {
+                var spawnPosition = spawnPoint.transform.position;
+                var direction = new Vector3(hit.point.x - spawnPosition.x, 0, hit.point.z - spawnPosition.z).normalized;
+                
+                //Quaternion spawnRotation = Quaternion.Euler(0, _playerController.transform.rotation.eulerAngles.y, 0);
+                var spawnRotation = Quaternion.identity;
+                var weapon = ObjectPooler.Instance.SpawnFromPool<WeaponThrow>(spawnPoint.transform.position , spawnRotation);
+                weapon.playerObject = gameObject;
+                weapon.direction = direction;
+                
+                AudioManager.Play(SoundType.Wobble);
+            }
+        }
+        
         public void UpdatePlayer()
         {
             var playerObject = AllegianceManager.TryGetPlayer();
