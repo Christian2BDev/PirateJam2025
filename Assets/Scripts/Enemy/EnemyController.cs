@@ -10,6 +10,7 @@ public class EnemyController : MonoBehaviour, IEnemyController, IHealth
 
 {
     private GameObject _player;
+    public float Health => health;
    [SerializeField] private float health;
    [SerializeField] private float rotationSpeed;
    [SerializeField] private int shootDamage;

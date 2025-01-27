@@ -23,7 +23,9 @@ public class PlayerController : MonoBehaviour, IHealth
             transform.rotation = Quaternion.LookRotation(newDirection);
         }
     }
-    
+
+    public float Health => health;
+
     public void TakeDamage(int damage) {
         health -= damage;
         if (health <= 0) {
