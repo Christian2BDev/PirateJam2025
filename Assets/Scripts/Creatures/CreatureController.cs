@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Player;
 using Shared;
 using Sound;
@@ -17,6 +18,11 @@ namespace Creatures
         [SerializeField] private float rotationSpeed;
         [SerializeField] private LayerMask groundLayer;
         
+        [Header("Camera Settings")]
+        [SerializeField] private float cameraFolowingSpeed;
+        [SerializeField] private Vector3 offset = new Vector3(0, 13, -0.5f);
+        private Vector3 _vel = Vector3.zero; 
+        
         [Header("Enemy config")] 
         [SerializeField] private int approachDistance = 8;
         [SerializeField] private float aggroRange = 12;
@@ -27,7 +33,9 @@ namespace Creatures
         [Header("Player config")]
         [SerializeField] private float playerAttackCooldown = 1f;
         [SerializeField] private float throwWeaponCooldown = 5f; 
-        
+        [SerializeField] private float acceleration;
+        [SerializeField] private float deceleration;
+
         private Vector2 _currentMoveInput = Vector2.zero;
         private Vector3 _mousePosition = Vector3.zero;
         private float _playerDistance = float.MaxValue;
@@ -39,7 +47,7 @@ namespace Creatures
         private CreatureStats _creatureStats;
         private AllegianceController _allegianceController;
         private bool _playerCanShoot;
-
+        private bool _isDashing;
         private void Awake()
         {
             _allegianceController = GetComponent<AllegianceController>();
@@ -58,6 +66,7 @@ namespace Creatures
         {
             UserInput.Main.OnPlayerInputMove += OnPlayerInputMove;
             UserInput.Main.OnPlayerFire += PlayerTryShoot;
+            UserInput.Main.OnPlayerSprint += StartDash;
             AllegianceManager.RegisterCreature(_allegianceController);
             
             ObjectPooler.Instance.RegisterPool<WeaponThrow>(gunThrowPrefab);
@@ -140,15 +149,17 @@ namespace Creatures
         private void UpdatePlayerMove()
         {
             var direction = _currentMoveInput;
-            var velocity = direction.normalized * _creatureStats.speed;
-
-            _rigidbody.linearVelocity = new Vector3(velocity.x, 0, velocity.y);
-
+            direction.Normalize();
+            var currentVelocity = _rigidbody.linearVelocity;
+            var velocity = new Vector3(direction.x,0,direction.y) * _creatureStats.speed;
+            currentVelocity = Vector3.Lerp(currentVelocity, velocity,
+                (velocity.magnitude > 0 ? acceleration : deceleration) * Time.fixedDeltaTime);
+            _rigidbody.linearVelocity = currentVelocity;
+            
             if (Camera.main is { } mainCamera)
             {
-                var cameraPosition = new Vector3(gameObject.transform.position.x, mainCamera.transform.position.y,
-                    gameObject.transform.position.z + CAMERA_OFFSET);
-                mainCamera.transform.position = cameraPosition;
+                Vector3 targetPosition = new Vector3(transform.position.x, offset.y, transform.position.z + offset.z);
+                mainCamera.transform.position = Vector3.SmoothDamp(mainCamera.transform.position, targetPosition, ref _vel, cameraFolowingSpeed);
             }
         }
 
@@ -175,6 +186,21 @@ namespace Creatures
             _rigidbody.linearVelocity = velocity;
         }
 
+        private async void StartDash()
+        {
+            if(_allegianceController.allegiance != AllegianceType.Player) return;
+            if(_isDashing) return;
+            _isDashing = true;
+            
+            var speed = _creatureStats.speed;
+            _creatureStats.speed = speed * 5;
+            await Task.Delay(200);
+            _creatureStats.speed = speed;
+            await Task.Delay(5000);
+            
+            _isDashing = false;
+        }
+        
         #endregion
 
         #region SHOOT
@@ -194,6 +220,7 @@ namespace Creatures
 
         private void PlayerTryShoot()
         {
+            if(_allegianceController.allegiance != AllegianceType.Player) return;
             if(!_playerCanShoot || _currentAttackCooldown > 0) return;
             
             Quaternion spawnRotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
@@ -255,5 +282,14 @@ namespace Creatures
                 if (_playerDistance < aggroRange) isAggro = true;
             }
         }
+        
+        private Vector3 ClampVector3(Vector3 vector, Vector3 min, Vector3 max) {
+            return new Vector3(
+                Mathf.Clamp(vector.x, min.x, max.x),
+                Mathf.Clamp(vector.y, min.y, max.y),
+                Mathf.Clamp(vector.z, min.z, max.z)
+            );
+        }
+
     }
 }
