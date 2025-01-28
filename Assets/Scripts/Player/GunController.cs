@@ -1,6 +1,7 @@
 using UnityEngine;
 using Player;
 using Shared;
+using Sound;
 
 public class GunController : MonoBehaviour
 {
@@ -24,5 +25,7 @@ public class GunController : MonoBehaviour
         bullet.damage = damage;
         bullet._canHit = CanHit.Enemys;
         
+        bullet.GetComponent<Bullet>().damage = damage;
+        AudioManager.Play(SoundType.Shoot);
     }
 }

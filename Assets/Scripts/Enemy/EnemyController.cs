@@ -1,5 +1,6 @@
 using Enemy;
 using Shared;
+using Sound;
 using UnityEngine;
 
 
@@ -68,6 +69,7 @@ public class EnemyController : MonoBehaviour, IEnemyController, IHealth
         var bullet = _objectPooler.SpawnFromPool<Bullet>(bulletSpawnPoint.transform.position, spawnRotation);
         bullet.damage = shootDamage;
         bullet._canHit = CanHit.Player;
+        AudioManager.Play(SoundType.Shoot);
     }
 
     private void SwingMelee() {
