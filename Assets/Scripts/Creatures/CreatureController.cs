@@ -12,14 +12,17 @@ namespace Creatures
     {
         private const float CAMERA_OFFSET = -0.5f;
 
-        [SerializeField] private int approachDistance = 6;
-        [SerializeField] private float aggroRange = 12;
-        [SerializeField] private bool isAggro = false;
-        [SerializeField] private Transform spawnPoint;
-        
         [SerializeField] private GameObject mainGun;
         [SerializeField] private GameObject cursedGun;
         [SerializeField] private GameObject gunThrowPrefab;
+        [SerializeField] private float rotationSpeed;
+
+        [Header("Enemy config")]
+        [SerializeField] private int approachDistance = 6;
+        [SerializeField] private float aggroRange = 12;
+        [SerializeField] private Transform spawnPoint;
+        [SerializeField] private bool isAggro = false;
+
         
         private Vector2 _currentMoveInput = Vector2.zero;
         
@@ -60,9 +63,14 @@ namespace Creatures
 
         private void Update()
         {
-            if (_allegianceController.allegiance == AllegianceType.Player && Input.GetKeyDown(KeyCode.E))
+            if (_allegianceController.allegiance == AllegianceType.Player)
             {
-                ThrowWeapon();
+                if(Input.GetKeyDown(KeyCode.E)) ThrowWeapon();
+                
+            }
+            else
+            {
+                EnemyLook();
             }
         }
 
@@ -70,7 +78,22 @@ namespace Creatures
         {
             _currentMoveInput = moveVector;
         }
+
+        #region LOOK
+
+        private void EnemyLook()
+        {
+            Vector3 targetDirection = _playerController.transform.position - transform.position;
+            targetDirection.y = 0;
+            float singleStep = rotationSpeed * Time.deltaTime;
+            Vector3 newDirection = Vector3.RotateTowards(transform.forward, targetDirection, singleStep, 0.0f);
+            transform.rotation = Quaternion.LookRotation(newDirection);
+        }
+
+        #endregion
         
+        #region MOVE
+  
         private void UpdatePlayerMove()
         {
             var direction = _currentMoveInput;
@@ -108,6 +131,7 @@ namespace Creatures
             _rigidbody.linearVelocity = velocity;
         }
 
+        #endregion      
         private void ThrowWeapon()
         {
             Vector3 mousePosition = Input.mousePosition;

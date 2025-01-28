@@ -328,13 +328,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e393b5c2d5cc412f8f521b9d58d8de80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  approachDistance: 6
-  aggroRange: 12
-  isAggro: 0
-  spawnPoint: {fileID: 5137230965142273452}
   mainGun: {fileID: 3305345480444471466}
   cursedGun: {fileID: 7072434355646960754}
   gunThrowPrefab: {fileID: 5573555486864369525, guid: b375ccf2889802e4a819c17ba29400e6, type: 3}
+  rotationSpeed: 10
+  approachDistance: 6
+  aggroRange: 12
+  spawnPoint: {fileID: 5137230965142273452}
+  isAggro: 0
 --- !u!114 &4992633701230116014
 MonoBehaviour:
   m_ObjectHideFlags: 0
