@@ -13,19 +13,25 @@ namespace Creatures
         [SerializeField] private GameObject mainGun;
         [SerializeField] private GameObject cursedGun;
         [SerializeField] private GameObject gunThrowPrefab;
+        [SerializeField] private GameObject bulletPrefab;
         [SerializeField] private float rotationSpeed;
         [SerializeField] private LayerMask groundLayer;
         
-        [Header("Enemy config")] [SerializeField]
-        private int approachDistance = 6;
-
+        [Header("Enemy config")] 
+        [SerializeField] private int approachDistance = 8;
         [SerializeField] private float aggroRange = 12;
         [SerializeField] private Transform spawnPoint;
         [SerializeField] private bool isAggro = false;
+        [SerializeField] private float enemyAttackCooldown = 1f;
 
-
+        [Header("Player config")]
+        [SerializeField] private float playerAttackCooldown = 1f;
+        [SerializeField] private float throwWeaponCooldown = 5f; 
+        
         private Vector2 _currentMoveInput = Vector2.zero;
         private Vector3 _mousePosition = Vector3.zero;
+        private float _playerDistance = float.MaxValue;
+        private float _currentAttackCooldown = 0f;
 
         private Rigidbody _rigidbody;
         private CreatureController _playerController;
@@ -36,7 +42,13 @@ namespace Creatures
         {
             _allegianceController = GetComponent<AllegianceController>();
             _creatureStats = GetComponent<CreatureStats>();
+            _creatureStats.OnDeath += OnDeath;
             _rigidbody = GetComponent<Rigidbody>();
+        }
+
+        private void OnDeath()
+        {
+            if(_allegianceController.allegiance is AllegianceType.Player) Debug.Log($"You Died");
         }
 
 
@@ -44,16 +56,19 @@ namespace Creatures
         {
             UserInput.Main.OnPlayerInputMove += OnPlayerInputMove;
             AllegianceManager.RegisterCreature(_allegianceController);
+            
             ObjectPooler.Instance.RegisterPool<WeaponThrow>(gunThrowPrefab);
+            ObjectPooler.Instance.RegisterPool<Bullet>(bulletPrefab);
         }
 
         private void FixedUpdate()
         {
-            GetMousePosition();
-            
             if (_playerController == null) UpdatePlayer();
             if (_playerController == null) return;
 
+            GetMousePosition();
+            UpdatePlayerDistance();
+            
             if (_allegianceController.allegiance == AllegianceType.Enemy)
             {
                 UpdateEnemyMove();
@@ -66,6 +81,9 @@ namespace Creatures
 
         private void Update()
         {
+            if (_playerController == null) return;
+
+            _currentAttackCooldown -= Time.deltaTime;
             if (_allegianceController.allegiance == AllegianceType.Player)
             {
                 if (Input.GetKeyDown(KeyCode.E)) ThrowWeapon();
@@ -74,6 +92,7 @@ namespace Creatures
             else
             {
                 EnemyLook();
+                EnemyTryShoot();
             }
         }
 
@@ -153,6 +172,23 @@ namespace Creatures
 
         #endregion
 
+        #region SHOOT
+
+        private void EnemyTryShoot()
+        {
+            if (!isAggro || _currentAttackCooldown > 0) return;
+            
+            Quaternion spawnRotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
+            var bullet = ObjectPooler.Instance.SpawnFromPool<Bullet>(spawnPoint.transform.position, spawnRotation);
+            bullet.damage = _creatureStats.shootDamage;
+            bullet.allegiance = AllegianceType.Enemy;
+            
+            AudioManager.Play(SoundType.Shoot);
+            _currentAttackCooldown = enemyAttackCooldown;
+        }
+
+        #endregion
+
         private void ThrowWeapon()
         {
             var spawnPosition = spawnPoint.transform.position;
@@ -184,6 +220,16 @@ namespace Creatures
             {
                 _mousePosition = hit.point;
             }
-        } 
+            
+        }
+
+        private void UpdatePlayerDistance()
+        {
+            if (_playerController != null)
+            {
+                _playerDistance = Vector3.Distance(transform.position, _playerController.transform.position);
+                if (_playerDistance < aggroRange) isAggro = true;
+            }
+        }
     }
 }

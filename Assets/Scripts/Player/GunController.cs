@@ -1,3 +1,4 @@
+using Creatures;
 using UnityEngine;
 using Player;
 using Shared;
@@ -23,7 +24,7 @@ public class GunController : MonoBehaviour
         Quaternion spawnRotation = Quaternion.Euler(0, player.transform.rotation.eulerAngles.y, 0);
         var bullet = _objectPooler.SpawnFromPool<Bullet>(bulletSpawnPoint.transform.position , spawnRotation);
         bullet.damage = damage;
-        bullet._canHit = CanHit.Enemys;
+        bullet.allegiance = AllegianceType.Player;
         
         bullet.GetComponent<Bullet>().damage = damage;
         AudioManager.Play(SoundType.Shoot);

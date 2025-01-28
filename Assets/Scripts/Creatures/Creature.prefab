@@ -331,14 +331,18 @@ MonoBehaviour:
   mainGun: {fileID: 3305345480444471466}
   cursedGun: {fileID: 7072434355646960754}
   gunThrowPrefab: {fileID: 5573555486864369525, guid: b375ccf2889802e4a819c17ba29400e6, type: 3}
+  bulletPrefab: {fileID: 4418777772250967488, guid: 9ff4462abc9d2417a9664df2de2b7b61, type: 3}
   rotationSpeed: 10
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  approachDistance: 6
+  approachDistance: 10
   aggroRange: 12
   spawnPoint: {fileID: 5137230965142273452}
   isAggro: 0
+  enemyAttackCooldown: 1
+  playerAttackCooldown: 1
+  throwWeaponCooldown: 5
 --- !u!114 &4992633701230116014
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -353,6 +357,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 100
   speed: 6
+  shootDamage: 10
 --- !u!114 &1764852066673939942
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -739,7 +744,7 @@ Transform:
   m_GameObject: {fileID: 7954709368244320329}
   serializedVersion: 2
   m_LocalRotation: {x: 1, y: -0, z: -0, w: 0}
-  m_LocalPosition: {x: 0.47800016, y: -0, z: 2.946}
+  m_LocalPosition: {x: 0.47800016, y: -0, z: 2.765}
   m_LocalScale: {x: 0.64, y: 0.64000016, z: 1.1200002}
   m_ConstrainProportionsScale: 0
   m_Children: []

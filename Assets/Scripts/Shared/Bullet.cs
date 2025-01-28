@@ -1,68 +1,48 @@
 using System;
+using Creatures;
 using UnityEngine;
-
-public enum CanHit
-{
-    Enemys,
-    Player
-}
 
 public class Bullet : MonoBehaviour
 {
-    public Camera cam;
     public int damage;
-    public CanHit _canHit;
-    [SerializeField] float speed;
+    public AllegianceType allegiance;
+    public float range;
     
+    [SerializeField] float speed;
+    private Vector3 _startPos = Vector3.zero;
     
     private Rigidbody _rb;
      void Start() { 
         _rb = GetComponent<Rigidbody>();
-        cam = Camera.main;
     }
      
 
     void Update() {
+        if(_startPos == Vector3.zero) _startPos = transform.position;
         _rb.position += transform.forward * Time.deltaTime *  speed ;
-        CheckIfObjectExitedViewport();
+        CheckRange();
     }
 
-    // private void OnCollisionEnter(Collision other) {
-    //     ReturnBulletToPool(gameObject);
-    //     if ( other.gameObject.TryGetComponent<IHealth>(out var health))
-    //     {
-    //         health.TakeDamage(damage);
-    //         
-    //     }else if (other.gameObject.transform.parent != null && other.gameObject.transform.parent.TryGetComponent<IHealth>(out var healthParent))
-    //     {
-    //         healthParent.TakeDamage(damage);
-    //     }
-    // }
+    private void CheckRange()
+    {
+        var distance = _startPos - transform.position;
+        if(distance.magnitude >= range)  ReturnBulletToPool(gameObject);
+    }
 
     private void OnTriggerEnter(Collider other)
     {
         
-        if ( other.gameObject.TryGetComponent<IHealth>(out var health))
+        if ( other.TryGetComponent<IHealth>(out var health))
         {
+            if (other.TryGetComponent<AllegianceController>(out var allegianceController))
+            {
+                if(allegianceController.allegiance == allegiance) return;
+            }
             health.TakeDamage(damage);
             ReturnBulletToPool(gameObject);
-            
-        }else if (other.gameObject.transform.parent != null && other.gameObject.transform.parent.TryGetComponent<IHealth>(out var healthParent))
-        {
-            healthParent.TakeDamage(damage);
-            ReturnBulletToPool(gameObject);
         }
     }
-
-    private void CheckIfObjectExitedViewport()
-    {
-        var viewport = cam.WorldToViewportPoint(transform.position);
-        if (viewport.x < 0 || viewport.x > 1 || viewport.y < 0 || viewport.y > 1)
-        {
-            ReturnBulletToPool(gameObject);
-        }
-    }
-
+    
     private void ReturnBulletToPool(GameObject bullet)
     {
         bullet.SetActive(false);
