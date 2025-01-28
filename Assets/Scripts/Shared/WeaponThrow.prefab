@@ -342,7 +342,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!114 &8664069370571776381
 MonoBehaviour:
@@ -357,7 +357,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 15
-  flyTime: 0.5
+  flyTime: 0.8
   direction: {x: 0, y: 0, z: 0}
   playerObject: {fileID: 0}
 --- !u!1 &5955829903252400123

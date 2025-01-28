@@ -1,4 +1,4 @@
-using System;
+using System.Linq;
 using Creatures;
 using UnityEngine;
 
@@ -9,18 +9,29 @@ public class Bullet : MonoBehaviour
     public float range;
     
     [SerializeField] float speed;
+    private bool _needsSetup = true;
     private Vector3 _startPos = Vector3.zero;
     
     private Rigidbody _rb;
      void Start() { 
         _rb = GetComponent<Rigidbody>();
     }
-     
+
+    private void OnEnable()
+    {
+        _needsSetup = true;
+    }
 
     void Update() {
-        if(_startPos == Vector3.zero) _startPos = transform.position;
+        if (_needsSetup) SetupBullet();
         _rb.position += transform.forward * Time.deltaTime *  speed ;
         CheckRange();
+    }
+
+    private void SetupBullet()
+    {
+        _startPos = transform.position;
+        _needsSetup = false;
     }
 
     private void CheckRange()
