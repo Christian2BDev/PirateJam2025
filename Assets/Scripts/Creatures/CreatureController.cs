@@ -1,14 +1,12 @@
-using System;
 using Player;
 using Shared;
 using Sound;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Creatures
 {
     [RequireComponent(typeof(CreatureStats)), RequireComponent(typeof(AllegianceController))]
-    public class CreatureController: MonoBehaviour
+    public class CreatureController : MonoBehaviour
     {
         private const float CAMERA_OFFSET = -0.5f;
 
@@ -16,16 +14,19 @@ namespace Creatures
         [SerializeField] private GameObject cursedGun;
         [SerializeField] private GameObject gunThrowPrefab;
         [SerializeField] private float rotationSpeed;
+        [SerializeField] private LayerMask groundLayer;
+        
+        [Header("Enemy config")] [SerializeField]
+        private int approachDistance = 6;
 
-        [Header("Enemy config")]
-        [SerializeField] private int approachDistance = 6;
         [SerializeField] private float aggroRange = 12;
         [SerializeField] private Transform spawnPoint;
         [SerializeField] private bool isAggro = false;
 
-        
+
         private Vector2 _currentMoveInput = Vector2.zero;
-        
+        private Vector3 _mousePosition = Vector3.zero;
+
         private Rigidbody _rigidbody;
         private CreatureController _playerController;
         private CreatureStats _creatureStats;
@@ -48,8 +49,10 @@ namespace Creatures
 
         private void FixedUpdate()
         {
-            if(_playerController == null) UpdatePlayer();
-            if(_playerController == null) return;
+            GetMousePosition();
+            
+            if (_playerController == null) UpdatePlayer();
+            if (_playerController == null) return;
 
             if (_allegianceController.allegiance == AllegianceType.Enemy)
             {
@@ -65,8 +68,8 @@ namespace Creatures
         {
             if (_allegianceController.allegiance == AllegianceType.Player)
             {
-                if(Input.GetKeyDown(KeyCode.E)) ThrowWeapon();
-                
+                if (Input.GetKeyDown(KeyCode.E)) ThrowWeapon();
+                PlayerLook();
             }
             else
             {
@@ -81,8 +84,12 @@ namespace Creatures
 
         #region LOOK
 
+        /// <summary>
+        /// Enemy (if aggroed) look at player
+        /// </summary>
         private void EnemyLook()
         {
+            if (!isAggro) return;
             Vector3 targetDirection = _playerController.transform.position - transform.position;
             targetDirection.y = 0;
             float singleStep = rotationSpeed * Time.deltaTime;
@@ -90,20 +97,33 @@ namespace Creatures
             transform.rotation = Quaternion.LookRotation(newDirection);
         }
 
+        /// <summary>
+        /// Player looks at direction of mouse
+        /// </summary>
+        void PlayerLook()
+        {
+            Vector3 targetDirection = _mousePosition - transform.position;
+            targetDirection.y = 0;
+            float singleStep = rotationSpeed * Time.deltaTime;
+            Vector3 newDirection = Vector3.RotateTowards(transform.forward, targetDirection, singleStep, 0.0f);
+            transform.rotation = Quaternion.LookRotation(newDirection);
+        }
+
         #endregion
-        
+
         #region MOVE
-  
+
         private void UpdatePlayerMove()
         {
             var direction = _currentMoveInput;
-            var velocity  = direction.normalized * _creatureStats.speed;
-            
+            var velocity = direction.normalized * _creatureStats.speed;
+
             _rigidbody.linearVelocity = new Vector3(velocity.x, 0, velocity.y);
 
             if (Camera.main is { } mainCamera)
             {
-                var cameraPosition = new Vector3(gameObject.transform.position.x, mainCamera.transform.position.y, gameObject.transform.position.z + CAMERA_OFFSET);
+                var cameraPosition = new Vector3(gameObject.transform.position.x, mainCamera.transform.position.y,
+                    gameObject.transform.position.z + CAMERA_OFFSET);
                 mainCamera.transform.position = cameraPosition;
             }
         }
@@ -120,38 +140,34 @@ namespace Creatures
             {
                 isAggro = true;
             }
-            
+
             if (distance < approachDistance || !isAggro)
             {
                 _rigidbody.linearVelocity = new Vector3(0, _rigidbody.linearVelocity.y, 0);
                 return;
             }
-            
+
             var velocity = vectorDirection.normalized * _creatureStats.speed;
             _rigidbody.linearVelocity = velocity;
         }
 
-        #endregion      
+        #endregion
+
         private void ThrowWeapon()
         {
-            Vector3 mousePosition = Input.mousePosition;
-            mousePosition.z = 2;
-            if (Camera.main is { } mainCamera &&
-                Physics.Raycast(mainCamera.ScreenPointToRay(mousePosition), out var hit))
-            {
-                var spawnPosition = spawnPoint.transform.position;
-                var direction = new Vector3(hit.point.x - spawnPosition.x, 0, hit.point.z - spawnPosition.z).normalized;
-                
-                //Quaternion spawnRotation = Quaternion.Euler(0, _playerController.transform.rotation.eulerAngles.y, 0);
-                var spawnRotation = Quaternion.identity;
-                var weapon = ObjectPooler.Instance.SpawnFromPool<WeaponThrow>(spawnPoint.transform.position , spawnRotation);
-                weapon.playerObject = gameObject;
-                weapon.direction = direction;
-                
-                AudioManager.Play(SoundType.Wobble);
-            }
+            var spawnPosition = spawnPoint.transform.position;
+            var direction = new Vector3(_mousePosition.x - spawnPosition.x, 0, _mousePosition.z - spawnPosition.z).normalized;
+
+            //Quaternion spawnRotation = Quaternion.Euler(0, _playerController.transform.rotation.eulerAngles.y, 0);
+            var spawnRotation = Quaternion.identity;
+            var weapon =
+                ObjectPooler.Instance.SpawnFromPool<WeaponThrow>(spawnPoint.transform.position, spawnRotation);
+            weapon.playerObject = gameObject;
+            weapon.direction = direction;
+
+            AudioManager.Play(SoundType.Wobble);
         }
-        
+
         public void UpdatePlayer()
         {
             var playerObject = AllegianceManager.TryGetPlayer();
@@ -159,5 +175,15 @@ namespace Creatures
             cursedGun.SetActive(_allegianceController.allegiance == AllegianceType.Player);
             mainGun.SetActive(_allegianceController.allegiance == AllegianceType.Enemy);
         }
+
+        private void GetMousePosition()
+        {
+            Vector3 mousePosition = Input.mousePosition;
+
+            if (Camera.main is { } mainCamera && Physics.Raycast(mainCamera.ScreenPointToRay(mousePosition), out var hit,999999, groundLayer))
+            {
+                _mousePosition = hit.point;
+            }
+        } 
     }
 }

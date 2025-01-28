@@ -332,6 +332,9 @@ MonoBehaviour:
   cursedGun: {fileID: 7072434355646960754}
   gunThrowPrefab: {fileID: 5573555486864369525, guid: b375ccf2889802e4a819c17ba29400e6, type: 3}
   rotationSpeed: 10
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 64
   approachDistance: 6
   aggroRange: 12
   spawnPoint: {fileID: 5137230965142273452}
