@@ -1,9 +1,17 @@
+using System;
 using UnityEngine;
+
+public enum CanHit
+{
+    Enemys,
+    Player
+}
 
 public class Bullet : MonoBehaviour
 {
     public Camera cam;
     public int damage;
+    public CanHit _canHit;
     [SerializeField] float speed;
     
     
@@ -19,15 +27,30 @@ public class Bullet : MonoBehaviour
         CheckIfObjectExitedViewport();
     }
 
-    private void OnCollisionEnter(Collision other) {
-        ReturnBulletToPool(gameObject);
+    // private void OnCollisionEnter(Collision other) {
+    //     ReturnBulletToPool(gameObject);
+    //     if ( other.gameObject.TryGetComponent<IHealth>(out var health))
+    //     {
+    //         health.TakeDamage(damage);
+    //         
+    //     }else if (other.gameObject.transform.parent != null && other.gameObject.transform.parent.TryGetComponent<IHealth>(out var healthParent))
+    //     {
+    //         healthParent.TakeDamage(damage);
+    //     }
+    // }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        
         if ( other.gameObject.TryGetComponent<IHealth>(out var health))
         {
             health.TakeDamage(damage);
+            ReturnBulletToPool(gameObject);
             
         }else if (other.gameObject.transform.parent != null && other.gameObject.transform.parent.TryGetComponent<IHealth>(out var healthParent))
         {
             healthParent.TakeDamage(damage);
+            ReturnBulletToPool(gameObject);
         }
     }
 
