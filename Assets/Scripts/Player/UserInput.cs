@@ -19,10 +19,7 @@ namespace Player
         public Action OnPlayerSprint { get; set; }
         private void Awake()
         {
-            if(Main is not null) Destroy(gameObject);
             Main = this;
-            DontDestroyOnLoad(gameObject);
-
             if (!TryGetComponent<PlayerInput>(out var playerInput))
             {
                 Debug.LogError("UserInput is missing a PlayerInput Component");

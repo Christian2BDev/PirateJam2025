@@ -92,6 +92,13 @@ namespace Creatures
             ObjectPooler.Instance.RegisterPool<Bullet>(bulletPrefab);
         }
 
+        private void OnDestroy()
+        {
+            UserInput.Main.OnPlayerInputMove -= OnPlayerInputMove;
+            UserInput.Main.OnPlayerFire -= PlayerTryShoot;
+            UserInput.Main.OnPlayerSprint -= StartDash;
+        }
+
         private void FixedUpdate()
         {
             if (_playerController == null) UpdatePlayer();
