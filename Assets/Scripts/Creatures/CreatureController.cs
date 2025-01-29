@@ -9,22 +9,33 @@ namespace Creatures
     [RequireComponent(typeof(CreatureStats)), RequireComponent(typeof(AllegianceController))]
     public class CreatureController : MonoBehaviour
     {
+        private static readonly int MeleeSwing = Animator.StringToHash("MeleeSwing");
         private const float CAMERA_OFFSET = -0.5f;
 
+        
+        [Header("References")]
         [SerializeField] private GameObject mainGun;
         [SerializeField] private GameObject cursedGun;
+        [SerializeField] private GameObject meleeWeapon;
+        [SerializeField] private GameObject hunterModel;
+        [SerializeField] private GameObject goblinModel;
         [SerializeField] private GameObject gunThrowPrefab;
         [SerializeField] private GameObject bulletPrefab;
-        [SerializeField] private float rotationSpeed;
         [SerializeField] private LayerMask groundLayer;
-        
+
         [Header("Camera Settings")]
         [SerializeField] private float cameraFolowingSpeed;
         [SerializeField] private Vector3 offset = new Vector3(0, 8f, -7f);
         private Vector3 _vel = Vector3.zero; 
         
+        [Header("Creature Settings")]
+        [SerializeField] private float rotationSpeed;
+
         [Header("Enemy config")] 
-        [SerializeField] private int approachDistance = 8;
+        [SerializeField] private float hunterApproachDistance = 10;
+        [SerializeField] private float goblinApproachDistance = 1;
+        [SerializeField] private float goblinAttackRange = 1.5f;
+        
         [SerializeField] private float aggroRange = 12;
         [SerializeField] private Transform spawnPoint;
         [SerializeField] private bool isAggro = false;
@@ -46,14 +57,21 @@ namespace Creatures
         private CreatureController _playerController;
         private CreatureStats _creatureStats;
         private AllegianceController _allegianceController;
+        private Animator _animator;
+
         private bool _playerCanShoot;
         private bool _isDashing;
+
         private void Awake()
         {
             _allegianceController = GetComponent<AllegianceController>();
             _creatureStats = GetComponent<CreatureStats>();
             _creatureStats.OnDeath += OnDeath;
             _rigidbody = GetComponent<Rigidbody>();
+            _animator = GetComponent<Animator>();
+            
+            hunterModel.SetActive(_creatureStats.creatureType == CreatureType.Hunter);
+            goblinModel.SetActive(_creatureStats.creatureType == CreatureType.Goblin);
         }
 
         private void OnDeath()
@@ -106,7 +124,14 @@ namespace Creatures
             else
             {
                 EnemyLook();
-                EnemyTryShoot();
+                if (_creatureStats.creatureType == CreatureType.Hunter)
+                {
+                    EnemyTryShoot();
+                }
+                else
+                {
+                    EnemyTryMelee();
+                }
             }
         }
 
@@ -175,7 +200,10 @@ namespace Creatures
             {
                 isAggro = true;
             }
-
+            
+            var approachDistance = hunterApproachDistance;
+            if(_creatureStats.creatureType is CreatureType.Goblin) approachDistance = goblinApproachDistance;
+            
             if (distance < approachDistance || !isAggro)
             {
                 _rigidbody.linearVelocity = new Vector3(0, _rigidbody.linearVelocity.y, 0);
@@ -218,6 +246,18 @@ namespace Creatures
             _currentAttackCooldown = enemyAttackCooldown;
         }
 
+        private void EnemyTryMelee()
+        {
+            if (!isAggro || _currentAttackCooldown > 0 || _playerDistance > goblinAttackRange) return;
+
+            if (_playerController.TryGetComponent<IHealth>(out var playerHealth))
+            {
+                _animator.SetTrigger(MeleeSwing);
+                playerHealth.TakeDamage( _creatureStats.shootDamage / 2);
+                _currentAttackCooldown = enemyAttackCooldown;
+            }
+        }
+
         private void PlayerTryShoot()
         {
             if(_allegianceController.allegiance != AllegianceType.Player) return;
@@ -256,9 +296,11 @@ namespace Creatures
         {
             var playerObject = AllegianceManager.TryGetPlayer();
             _playerController = playerObject?.GetComponent<CreatureController>();
-            cursedGun.SetActive(_allegianceController.allegiance == AllegianceType.Player);
-            mainGun.SetActive(_allegianceController.allegiance == AllegianceType.Enemy);
             
+            cursedGun.SetActive(_allegianceController.allegiance == AllegianceType.Player);
+            mainGun.SetActive(_allegianceController.allegiance == AllegianceType.Enemy && _creatureStats?.creatureType == CreatureType.Hunter);
+            meleeWeapon.SetActive(_allegianceController.allegiance == AllegianceType.Enemy && _creatureStats?.creatureType == CreatureType.Goblin);
+
             _playerCanShoot = _allegianceController.allegiance == AllegianceType.Player;
             _currentThrowWeaponCooldown = throwWeaponCooldown;
         }
