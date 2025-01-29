@@ -114,10 +114,12 @@ namespace Creatures
             if (_rigidbody.linearVelocity.magnitude > 0.1f)
             {
                 hunterAnimator.SetBool(IsMoving, true);
+                goblinAnimator.SetBool(IsMoving, true);
             }
             else
             {
                 hunterAnimator.SetBool(IsMoving, false);
+                goblinAnimator.SetBool(IsMoving, true);
             }
         }
 
@@ -261,7 +263,8 @@ namespace Creatures
         private void EnemyTryMelee()
         {
             if (!isAggro || _currentAttackCooldown > 0 || _playerDistance > goblinAttackRange) return;
-
+            
+            goblinAnimator.SetTrigger(MeleeSwing);
             if (_playerController.TryGetComponent<IHealth>(out var playerHealth))
             {
                 _animator.SetTrigger(MeleeSwing);
