@@ -3,6 +3,11 @@ using UnityEngine;
 
 namespace Creatures
 {
+    public enum CreatureType {
+        Hunter,
+        Goblin,
+    }
+
     public class CreatureStats: MonoBehaviour, IHealth
     {
         public int health = 100;
@@ -28,5 +33,7 @@ namespace Creatures
         }
 
         public float Health => health;
+        public CreatureType creatureType = CreatureType.Hunter;
+
     }
 }
