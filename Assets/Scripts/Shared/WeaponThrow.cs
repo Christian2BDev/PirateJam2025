@@ -20,6 +20,7 @@ namespace Shared
         private void OnEnable()
         {
             _currentFlyTime = flyTime;
+            _rb.angularVelocity = new Vector3(0,20,0);
         }
 
         void FixedUpdate()
