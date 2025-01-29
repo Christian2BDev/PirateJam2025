@@ -1,14 +1,18 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-public class Menu : MonoBehaviour
+
+namespace MainMenu
 {
-    public void PlayButton()
+    public class Menu : MonoBehaviour
     {
-        SceneManager.LoadSceneAsync(1);
-    }
-    public void Quit()
-    {
-        Application.Quit();
-        Debug.Log("Quit succesfully");
+        public void PlayButton()
+        {
+            SceneManager.LoadScene("GambitScene");
+        }
+        public void Quit()
+        {
+            Application.Quit();
+            Debug.Log("Quit succesfully");
+        }
     }
 }
