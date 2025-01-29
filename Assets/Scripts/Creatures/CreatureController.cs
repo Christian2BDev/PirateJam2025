@@ -20,7 +20,7 @@ namespace Creatures
         
         [Header("Camera Settings")]
         [SerializeField] private float cameraFolowingSpeed;
-        [SerializeField] private Vector3 offset = new Vector3(0, 13, -0.5f);
+        [SerializeField] private Vector3 offset = new Vector3(0, 8f, -7f);
         private Vector3 _vel = Vector3.zero; 
         
         [Header("Enemy config")] 
