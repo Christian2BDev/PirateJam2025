@@ -10,6 +10,7 @@ namespace Creatures
     public class CreatureController : MonoBehaviour
     {
         private static readonly int MeleeSwing = Animator.StringToHash("MeleeSwing");
+        private static readonly int IsMoving = Animator.StringToHash("IsMoving");
         private const float CAMERA_OFFSET = -0.5f;
 
         
@@ -19,6 +20,8 @@ namespace Creatures
         [SerializeField] private GameObject meleeWeapon;
         [SerializeField] private GameObject hunterModel;
         [SerializeField] private GameObject goblinModel;
+        [SerializeField] private Animator hunterAnimator;
+        [SerializeField] private Animator goblinAnimator;
         [SerializeField] private GameObject gunThrowPrefab;
         [SerializeField] private GameObject bulletPrefab;
         [SerializeField] private LayerMask groundLayer;
@@ -106,6 +109,15 @@ namespace Creatures
             else
             {
                 UpdatePlayerMove();
+            }
+
+            if (_rigidbody.linearVelocity.magnitude > 0.1f)
+            {
+                hunterAnimator.SetBool(IsMoving, true);
+            }
+            else
+            {
+                hunterAnimator.SetBool(IsMoving, false);
             }
         }
 
