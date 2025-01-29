@@ -1,5 +1,7 @@
+using Creatures;
 using Enemy;
 using Shared;
+using Sound;
 using UnityEngine;
 
 
@@ -67,6 +69,8 @@ public class EnemyController : MonoBehaviour, IEnemyController, IHealth
         Quaternion spawnRotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
         var bullet = _objectPooler.SpawnFromPool<Bullet>(bulletSpawnPoint.transform.position, spawnRotation);
         bullet.damage = shootDamage;
+        bullet.allegiance = AllegianceType.Enemy;
+        AudioManager.Play(SoundType.Shoot);
     }
 
     private void SwingMelee() {

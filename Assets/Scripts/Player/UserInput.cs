@@ -8,6 +8,7 @@ namespace Player
     {
         public Action<Vector2> OnPlayerInputMove { get; set; }
         public Action OnPlayerFire { get; set; }
+        public Action OnPlayerSprint { get; set; }
     }
     
     public class UserInput: MonoBehaviour, IUserInput
@@ -15,6 +16,7 @@ namespace Player
         public static IUserInput Main;
         public Action<Vector2> OnPlayerInputMove { get; set; } 
         public Action OnPlayerFire { get; set; }
+        public Action OnPlayerSprint { get; set; }
         private void Awake()
         {
             if(Main is not null) Destroy(gameObject);
@@ -35,6 +37,11 @@ namespace Player
         private void OnFire()
         {
             OnPlayerFire?.Invoke();
+        }
+
+        private void OnSprint()
+        {
+            OnPlayerSprint?.Invoke();
         }
     }
     
