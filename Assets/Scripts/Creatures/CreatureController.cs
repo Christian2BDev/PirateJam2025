@@ -60,7 +60,6 @@ namespace Creatures
         private CreatureController _playerController;
         private CreatureStats _creatureStats;
         private AllegianceController _allegianceController;
-        private Animator _animator;
 
         private bool _playerCanShoot;
         private bool _isDashing;
@@ -71,7 +70,6 @@ namespace Creatures
             _creatureStats = GetComponent<CreatureStats>();
             _creatureStats.OnDeath += OnDeath;
             _rigidbody = GetComponent<Rigidbody>();
-            _animator = GetComponent<Animator>();
             
             hunterModel.SetActive(_creatureStats.creatureType == CreatureType.Hunter);
             goblinModel.SetActive(_creatureStats.creatureType == CreatureType.Goblin);
@@ -113,13 +111,13 @@ namespace Creatures
 
             if (_rigidbody.linearVelocity.magnitude > 0.1f)
             {
-                hunterAnimator.SetBool(IsMoving, true);
-                goblinAnimator.SetBool(IsMoving, true);
+                if (_creatureStats.creatureType == CreatureType.Hunter) hunterAnimator.SetBool(IsMoving, true);
+                if (_creatureStats.creatureType == CreatureType.Goblin) goblinAnimator.SetBool(IsMoving, true);
             }
             else
             {
-                hunterAnimator.SetBool(IsMoving, false);
-                goblinAnimator.SetBool(IsMoving, true);
+                if (_creatureStats.creatureType == CreatureType.Hunter) hunterAnimator.SetBool(IsMoving, false);
+                if (_creatureStats.creatureType == CreatureType.Goblin) goblinAnimator.SetBool(IsMoving, false);
             }
         }
 
@@ -267,7 +265,6 @@ namespace Creatures
             goblinAnimator.SetTrigger(MeleeSwing);
             if (_playerController.TryGetComponent<IHealth>(out var playerHealth))
             {
-                _animator.SetTrigger(MeleeSwing);
                 playerHealth.TakeDamage( _creatureStats.shootDamage / 2);
                 _currentAttackCooldown = enemyAttackCooldown;
             }
