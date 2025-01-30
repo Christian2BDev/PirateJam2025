@@ -45,15 +45,15 @@ namespace Environment
             var deadTargets = new List<IHealth>();
             foreach (var target in _bleedTargets)
             {
-                if (target.Health <= 0)
+                if (target.MaxHealth <= 0)
                 {
                     deadTargets.Add(target);
                 }
 
                 target.TakeDamage(_damage);
-                var health = target.Health;
+                var health = target.MaxHealth;
                 
-                if (target.Health <= 0)
+                if (target.MaxHealth <= 0)
                 {
                     deadTargets.Add(target);
                 }

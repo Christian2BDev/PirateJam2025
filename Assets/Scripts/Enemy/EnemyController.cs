@@ -3,6 +3,7 @@ using Enemy;
 using Shared;
 using Sound;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 
 public enum EnemyType {
@@ -12,8 +13,8 @@ public class EnemyController : MonoBehaviour, IEnemyController, IHealth
 
 {
     private GameObject _player;
-    public float Health => health;
-   [SerializeField] private float health;
+    public float MaxHealth => maxHealth;
+   [FormerlySerializedAs("health")] [SerializeField] private float maxHealth;
    [SerializeField] private float rotationSpeed;
    [SerializeField] private int shootDamage;
    [SerializeField] private GameObject bulletPrefab;
@@ -80,8 +81,8 @@ public class EnemyController : MonoBehaviour, IEnemyController, IHealth
     
 
     public void TakeDamage(int damage) {
-        health -= damage;
-        if (health <= 0) {
+        maxHealth -= damage;
+        if (maxHealth <= 0) {
             Destroy(gameObject);
         }
     }

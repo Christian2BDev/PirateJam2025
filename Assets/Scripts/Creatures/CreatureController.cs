@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Player;
 using Shared;
 using Sound;
+using UI;
 using UnityEngine;
 
 namespace Creatures
@@ -60,6 +61,7 @@ namespace Creatures
         private CreatureController _playerController;
         private CreatureStats _creatureStats;
         private AllegianceController _allegianceController;
+        private HealthBar _health;
 
         private bool _playerCanShoot;
         private bool _isDashing;
@@ -69,24 +71,42 @@ namespace Creatures
             _allegianceController = GetComponent<AllegianceController>();
             _creatureStats = GetComponent<CreatureStats>();
             _creatureStats.OnDeath += OnDeath;
+            _creatureStats.OnDamage += OnDamage;
             _rigidbody = GetComponent<Rigidbody>();
-            
             hunterModel.SetActive(_creatureStats.creatureType == CreatureType.Hunter);
             goblinModel.SetActive(_creatureStats.creatureType == CreatureType.Goblin);
         }
 
+        private void OnDamage()
+        {
+            _health.SetHealth(_creatureStats.CurrentHealth, _creatureStats.MaxHealth);
+        }
+        
         private void OnDeath()
         {
+            _health.gameObject.SetActive(false);
             if(_allegianceController.allegiance is AllegianceType.Player) Debug.Log($"You Died");
         }
 
 
         private void Start()
         {
+            if (UserInput.Main == null)
+            {
+                Debug.LogWarning("You need to set the Main User Input on the Scene");
+            }
+            
             UserInput.Main.OnPlayerInputMove += OnPlayerInputMove;
             UserInput.Main.OnPlayerFire += PlayerTryShoot;
             UserInput.Main.OnPlayerSprint += StartDash;
             AllegianceManager.RegisterCreature(_allegianceController);
+
+            if (GameUI.Main is { } gameUI)
+            {
+                _health = gameUI.CreateHealthBar();
+                _health.SetHealth(_creatureStats.maxHealth, _creatureStats.CurrentHealth);
+            } 
+
             
             ObjectPooler.Instance.RegisterPool<WeaponThrow>(gunThrowPrefab);
             ObjectPooler.Instance.RegisterPool<Bullet>(bulletPrefab);
@@ -152,6 +172,8 @@ namespace Creatures
                     EnemyTryMelee();
                 }
             }
+            
+            _health.UpdatePosition(transform.position);
         }
 
         private void OnPlayerInputMove(Vector2 moveVector)
