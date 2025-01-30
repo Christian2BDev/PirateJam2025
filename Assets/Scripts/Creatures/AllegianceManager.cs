@@ -11,7 +11,7 @@ namespace Creatures
         
         private const float STATE_CHANGE_REFRESH = 1f;
 
-        private static AllegianceManager _instance;
+        static AllegianceManager _instance;
         private readonly List<AllegianceController> _allCreatures = new();
         private float _stateChangeCooldown = 0f;
         private bool _gameOver = false;
@@ -47,6 +47,11 @@ namespace Creatures
 
         public static void RegisterCreature(AllegianceController allegianceController)
         {
+            if (_instance == null)
+            {
+                Debug.LogError("Allegiance Manager missing from the scene.");
+                return;
+            }
             _instance.Register(allegianceController);
         }
 
@@ -75,6 +80,7 @@ namespace Creatures
 
         public static GameObject TryGetPlayer()
         {
+            if (_instance == null) return null;
             return _instance.FindPlayer();
         }
 

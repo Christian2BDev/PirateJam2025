@@ -263,14 +263,17 @@ MonoBehaviour:
   hunterApproachDistance: 10
   goblinApproachDistance: 2
   goblinAttackRange: 2
-  aggroRange: 12
+  aggroRange: 17
   spawnPoint: {fileID: 5137230965142273452}
   isAggro: 0
   enemyAttackCooldown: 1
   playerAttackCooldown: 1
   throwWeaponCooldown: 5
+  dashCooldown: 5
   acceleration: 10
   deceleration: 10
+  currentThrowWeaponCooldown: 0
+  currentDashCooldown: 0
 --- !u!114 &4992633701230116014
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -283,7 +286,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72881ec8c8834806948340f7b7e00617, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
+  maxHealth: 100
   speed: 10
   shootDamage: 10
   creatureType: 0

@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Creatures
 {
@@ -10,29 +11,33 @@ namespace Creatures
 
     public class CreatureStats: MonoBehaviour, IHealth
     {
-        public int health = 100;
+        [FormerlySerializedAs("health")] public int maxHealth = 100;
         public float speed = 100;
         public int shootDamage = 10;
         public Action OnDeath { get; set; }
+        public Action OnDamage { get; set; }
 
         private int _currentHealth;
 
         private void Start()
         {
-            _currentHealth = health;
+            _currentHealth = maxHealth;
         }
 
         public void TakeDamage(int damage)
         {
             _currentHealth -= damage;
+            OnDamage?.Invoke();
             if (_currentHealth <= 0)
             {
                 OnDeath?.Invoke();
                 gameObject.SetActive(false);
-            }
+            } 
+            
         }
 
-        public float Health => health;
+        public float MaxHealth => maxHealth;
+        public float CurrentHealth => _currentHealth;
         public CreatureType creatureType = CreatureType.Hunter;
 
     }

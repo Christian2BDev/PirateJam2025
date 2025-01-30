@@ -96,7 +96,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 15
-  flyTime: 0.8
+  flyTime: 1
   direction: {x: 0, y: 0, z: 0}
   playerObject: {fileID: 0}
 --- !u!1001 &4374421305569429018

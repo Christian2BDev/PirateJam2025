@@ -2,7 +2,9 @@ using System.Threading.Tasks;
 using Player;
 using Shared;
 using Sound;
+using UI;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Creatures
 {
@@ -46,7 +48,8 @@ namespace Creatures
 
         [Header("Player config")]
         [SerializeField] private float playerAttackCooldown = 1f;
-        [SerializeField] private float throwWeaponCooldown = 5f; 
+        [SerializeField] public float throwWeaponCooldown = 5f;
+        [SerializeField] public float dashCooldown = 5f;
         [SerializeField] private float acceleration;
         [SerializeField] private float deceleration;
 
@@ -54,12 +57,14 @@ namespace Creatures
         private Vector3 _mousePosition = Vector3.zero;
         private float _playerDistance = float.MaxValue;
         private float _currentAttackCooldown = 0f;
-        private float _currentThrowWeaponCooldown = 0f;
+        public float currentThrowWeaponCooldown = 0f;
+        public float currentDashCooldown = 0f;
 
         private Rigidbody _rigidbody;
         private CreatureController _playerController;
         private CreatureStats _creatureStats;
         private AllegianceController _allegianceController;
+        private HealthBar _health;
 
         private bool _playerCanShoot;
         private bool _isDashing;
@@ -69,24 +74,41 @@ namespace Creatures
             _allegianceController = GetComponent<AllegianceController>();
             _creatureStats = GetComponent<CreatureStats>();
             _creatureStats.OnDeath += OnDeath;
+            _creatureStats.OnDamage += OnDamage;
             _rigidbody = GetComponent<Rigidbody>();
-            
             hunterModel.SetActive(_creatureStats.creatureType == CreatureType.Hunter);
             goblinModel.SetActive(_creatureStats.creatureType == CreatureType.Goblin);
         }
 
+        private void OnDamage()
+        {
+            _health.SetHealth(_creatureStats.CurrentHealth, _creatureStats.MaxHealth);
+        }
+        
         private void OnDeath()
         {
-            if(_allegianceController.allegiance is AllegianceType.Player) Debug.Log($"You Died");
+            _health.gameObject.SetActive(false);
         }
 
 
         private void Start()
         {
+            if (UserInput.Main == null)
+            {
+                Debug.LogWarning("You need to set the Main User Input on the Scene");
+            }
+            
             UserInput.Main.OnPlayerInputMove += OnPlayerInputMove;
             UserInput.Main.OnPlayerFire += PlayerTryShoot;
             UserInput.Main.OnPlayerSprint += StartDash;
             AllegianceManager.RegisterCreature(_allegianceController);
+
+            if (GameUI.Main is { } gameUI)
+            {
+                _health = gameUI.CreateHealthBar();
+                _health.SetHealth(_creatureStats.maxHealth, _creatureStats.CurrentHealth);
+            } 
+
             
             ObjectPooler.Instance.RegisterPool<WeaponThrow>(gunThrowPrefab);
             ObjectPooler.Instance.RegisterPool<Bullet>(bulletPrefab);
@@ -132,8 +154,9 @@ namespace Creatures
         {
             if (_playerController == null) return;
 
+            currentDashCooldown -= Time.deltaTime;
             _currentAttackCooldown -= Time.deltaTime;
-            _currentThrowWeaponCooldown -= Time.deltaTime;
+            currentThrowWeaponCooldown -= Time.deltaTime;
             
             if (_allegianceController.allegiance == AllegianceType.Player)
             {
@@ -152,6 +175,8 @@ namespace Creatures
                     EnemyTryMelee();
                 }
             }
+            
+            _health.UpdatePosition(transform.position);
         }
 
         private void OnPlayerInputMove(Vector2 moveVector)
@@ -235,7 +260,7 @@ namespace Creatures
 
         private async void StartDash()
         {
-            if(_allegianceController.allegiance != AllegianceType.Player) return;
+            if(_allegianceController.allegiance != AllegianceType.Player || currentDashCooldown > 0) return;
             if(_isDashing) return;
             _isDashing = true;
             
@@ -243,9 +268,8 @@ namespace Creatures
             _creatureStats.speed = speed * 5;
             await Task.Delay(200);
             _creatureStats.speed = speed;
-            await Task.Delay(5000);
-            
             _isDashing = false;
+            currentDashCooldown = dashCooldown;
         }
         
         #endregion
@@ -295,7 +319,7 @@ namespace Creatures
 
         private void ThrowWeapon()
         {
-            if(_currentThrowWeaponCooldown > 0) return;
+            if(currentThrowWeaponCooldown > 0) return;
             var spawnPosition = spawnPoint.transform.position;
             var direction = new Vector3(_mousePosition.x - spawnPosition.x, 0, _mousePosition.z - spawnPosition.z).normalized;
             _playerCanShoot = false;
@@ -321,7 +345,7 @@ namespace Creatures
             meleeWeapon.SetActive(_allegianceController.allegiance == AllegianceType.Enemy && _creatureStats?.creatureType == CreatureType.Goblin);
 
             _playerCanShoot = _allegianceController.allegiance == AllegianceType.Player;
-            _currentThrowWeaponCooldown = throwWeaponCooldown;
+            currentThrowWeaponCooldown = throwWeaponCooldown;
         }
 
         private void GetMousePosition()

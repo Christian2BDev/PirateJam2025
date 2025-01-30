@@ -341,7 +341,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 313289646}
-  - component: {fileID: 313289645}
   - component: {fileID: 313289644}
   m_Layer: 0
   m_Name: GameOver
@@ -365,21 +364,6 @@ MonoBehaviour:
   gameOverPanel: {fileID: 246094351}
   titleText: {fileID: 830129566}
   subtitleText: {fileID: 175822903}
---- !u!114 &313289645
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 313289643}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b9c466c619433f34587b5801dd65294a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gameOverPanel: {fileID: 0}
-  titleText: {fileID: 0}
-  subtitleText: {fileID: 0}
 --- !u!4 &313289646
 Transform:
   m_ObjectHideFlags: 0

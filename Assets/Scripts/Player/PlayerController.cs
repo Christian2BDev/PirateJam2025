@@ -1,18 +1,19 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PlayerController : MonoBehaviour, IHealth
 {
     private Camera _camera;
-    [SerializeField] private float health;
+    [FormerlySerializedAs("health")] [SerializeField] private float maxHealth;
     void Start() {
         _camera = Camera.main;
     }
 
-    public float Health => health;
+    public float MaxHealth => maxHealth;
 
     public void TakeDamage(int damage) {
-        health -= damage;
-        if (health <= 0) {
+        maxHealth -= damage;
+        if (maxHealth <= 0) {
             //Destroy(gameObject);
         }
     }
