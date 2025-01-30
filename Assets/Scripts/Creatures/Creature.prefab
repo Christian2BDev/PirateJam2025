@@ -125,6 +125,7 @@ Transform:
   - {fileID: 5137230965142273452}
   - {fileID: 5051234861573328664}
   - {fileID: 2018453849463827766}
+  - {fileID: 9112279630692083833}
   - {fileID: 7070035885005221034}
   - {fileID: 7834442767263870655}
   m_Father: {fileID: 0}
@@ -245,7 +246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainGun: {fileID: 5571594804650153378}
-  cursedGun: {fileID: 7072434355646960754}
+  cursedGun: {fileID: 8448333604963857091}
   meleeWeapon: {fileID: 536535682328585170}
   hunterModel: {fileID: 7590254777535067664}
   goblinModel: {fileID: 7490146560283800581}
@@ -856,6 +857,85 @@ GameObject:
 Transform:
   m_CorrespondingSourceObject: {fileID: 1443297018187042842, guid: dbd6bd26deca00045ac105a9968b25ca, type: 3}
   m_PrefabInstance: {fileID: 1746945913137359218}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &3000713986573883763
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3073174243263695509}
+    m_Modifications:
+    - target: {fileID: 6328119822884647178, guid: 00cdba7d114fd9b48bad8a14ef1aafd2, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 23.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328119822884647178, guid: 00cdba7d114fd9b48bad8a14ef1aafd2, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 23.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328119822884647178, guid: 00cdba7d114fd9b48bad8a14ef1aafd2, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 23.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328119822884647178, guid: 00cdba7d114fd9b48bad8a14ef1aafd2, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.47
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328119822884647178, guid: 00cdba7d114fd9b48bad8a14ef1aafd2, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.174
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328119822884647178, guid: 00cdba7d114fd9b48bad8a14ef1aafd2, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.492
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328119822884647178, guid: 00cdba7d114fd9b48bad8a14ef1aafd2, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328119822884647178, guid: 00cdba7d114fd9b48bad8a14ef1aafd2, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328119822884647178, guid: 00cdba7d114fd9b48bad8a14ef1aafd2, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328119822884647178, guid: 00cdba7d114fd9b48bad8a14ef1aafd2, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328119822884647178, guid: 00cdba7d114fd9b48bad8a14ef1aafd2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328119822884647178, guid: 00cdba7d114fd9b48bad8a14ef1aafd2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328119822884647178, guid: 00cdba7d114fd9b48bad8a14ef1aafd2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6672698436511722416, guid: 00cdba7d114fd9b48bad8a14ef1aafd2, type: 3}
+      propertyPath: m_Name
+      value: DragonGun
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 00cdba7d114fd9b48bad8a14ef1aafd2, type: 3}
+--- !u!1 &8448333604963857091 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6672698436511722416, guid: 00cdba7d114fd9b48bad8a14ef1aafd2, type: 3}
+  m_PrefabInstance: {fileID: 3000713986573883763}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &9112279630692083833 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6328119822884647178, guid: 00cdba7d114fd9b48bad8a14ef1aafd2, type: 3}
+  m_PrefabInstance: {fileID: 3000713986573883763}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6513499501031492867
 PrefabInstance:
