@@ -80,6 +80,7 @@ namespace Creatures
 
         public static GameObject TryGetPlayer()
         {
+            if (_instance == null) return null;
             return _instance.FindPlayer();
         }
 
