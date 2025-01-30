@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -26,6 +27,11 @@ namespace Sound
                 sound.Source.pitch = sound.pitch;
                 sound.Source.Stop();
             }
+        }
+
+        private void OnDestroy()
+        {
+            _instance = null;
         }
 
         public static void Play(SoundType soundType)
