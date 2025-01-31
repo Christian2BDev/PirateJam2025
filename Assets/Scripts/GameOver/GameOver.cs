@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Threading.Tasks;
 using Creatures;
 using TMPro;
@@ -40,20 +41,37 @@ namespace GameOver
             }
         }
 
-        private async void StartFlow()
+        public void GoToMainMenu()
+        { SceneManager.LoadScene("MainMenu");
+            
+        }
+
+        private  void StartFlow()
         {
             _flowFinished = false;
             var color = _lostColor;
             if(AllegianceManager.GameWon) color = _winColor;
+            StartCoroutine(opacity(color));
+            /*var progress = 0f;
+            while (progress <= 1f)
+            {
+                gameOverPanel.color = new Color(color.r, color.g, color.b, progress);
+                progress += 0.01f;
 
+            }
+
+            _flowFinished = true;*/
+        }
+
+        IEnumerator opacity(Color color)
+        {
             var progress = 0f;
             while (progress <= 1f)
             {
                 gameOverPanel.color = new Color(color.r, color.g, color.b, progress);
                 progress += 0.01f;
-                await Task.Delay(10);
+                yield return new WaitForSeconds(0.01f);
             }
-            await Task.Delay(1000);
             _flowFinished = true;
         }
 

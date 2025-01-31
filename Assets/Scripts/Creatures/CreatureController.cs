@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Threading.Tasks;
 using Player;
 using Shared;
@@ -258,20 +259,25 @@ namespace Creatures
             _rigidbody.linearVelocity = velocity;
         }
 
-        private async void StartDash()
+        private  void StartDash()
         {
             if(_allegianceController.allegiance != AllegianceType.Player || currentDashCooldown > 0) return;
             if(_isDashing) return;
             _isDashing = true;
             
+           StartCoroutine(Dash());
+        }
+
+        IEnumerator Dash()
+        {
             var speed = _creatureStats.speed;
             _creatureStats.speed = speed * 5;
-            await Task.Delay(200);
+            yield return new WaitForSeconds(0.2f);
             _creatureStats.speed = speed;
             _isDashing = false;
             currentDashCooldown = dashCooldown;
         }
-        
+
         #endregion
 
         #region SHOOT
